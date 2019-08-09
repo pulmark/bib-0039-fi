@@ -1,3 +1,19 @@
+/**
+Copyright (C) 2017 Markku Pulkkinen
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+**/
+
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -83,20 +99,6 @@ int main() {
             }
             if (!isValid) continue;
 
-            /*
-            // 4. rule: no same consecutive letters in word
-            size_t pos{0};
-            for (auto &i : line) {
-              char curr = i;
-              if (pos && curr == line.at(pos - 1)) {
-                isValid = false;
-                break;
-              }
-              pos++;
-            }
-            if (!isValid) continue;
-      */
-
             // 5. rule: no words that start with rare char
             auto pos = line.find_first_of(rare_first);
             if (pos == 0) continue;
@@ -135,29 +137,25 @@ int main() {
 
         // generate long enough init seed sequence so that no special warm-up time
         // is required for the M-T algorithm engine.
-        /*
-    std::array<int, 624> seed_data;
-    std::random_device r;
-    std::generate_n(seed_data.data(), seed_data.size(), std::ref(r));
-    std::seed_seq seq(std::begin(seed_data), std::end(seed_data));
-    std::mt19937 engine = std::mt19937(seq);
-    */
-        //    std::mt19937 engine;
         std::mt19937 engine = std::mt19937(randutils::auto_seed_256{}.base());
         std::uniform_int_distribution<unsigned int> dist(0, words.size() - 1);
         valid.resize(2048);
         cnt = 0;
+
+        // generate valid word list using M-T engine
         do {
             std::string word = words[dist(engine)];
             if (std::find(valid.begin(), valid.end(), word) != valid.end()) continue;
             valid[cnt++] = word;
         } while (cnt < 2048);
 
+        // sort and save valid word list
         std::sort(valid.begin(), valid.end());
         for (auto &it : valid) of << it << std::endl;
+        
+        // print some statistics, close files
         std::cout << "valid word count: " << cnt << std::endl;
         std::cout << "total word count: " << words.size() << std::endl;
-
         of.close();
         myfile.close();
         forbiddenfile.close();
