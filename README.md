@@ -1,5 +1,5 @@
 # BIP-0039-fi
-Command line tool to create a finnish language wordlist for Bitcoin BIP39.
+Command line tool to create a finnish language wordlist for Bitcoin BIP39. The tools use Finnish dictionary created by Institute for the languages of Finland as source for wordlist creation.
 
 See [Bitcoin bip-0039.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) for details.
 
