@@ -27,6 +27,7 @@ namespace {
 const std::string fnAll{"kotus-sanalista_v1.txt"};
 const std::string fnBip0039{"finnish.txt"};
 const std::string fnForbidden{"forbidden.txt"};
+const std::string fnRejected{"rejected.txt"};
 
 unsigned long strDifference(const std::string &s1, const std::string &s2) {
     auto cnt = std::min(s1.length(), s2.length());
@@ -41,6 +42,7 @@ unsigned long strDifference(const std::string &s1, const std::string &s2) {
 int main() {
     std::ifstream forbiddenfile(fnForbidden);
     std::ofstream of(fnBip0039);
+    std::ofstream rf(fnRejected);
     std::vector<std::string> forbidden;
     for (std::string temp; std::getline(forbiddenfile, temp); /**/)
         forbidden.push_back(temp);
@@ -58,7 +60,10 @@ int main() {
             auto len{line.length()};
 
             // 1. rule: word length range [5,8]
-            if (len < 5 || len > 8) continue;
+            if (len < 5 || len > 8) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 2. rule: no forbidden words
             if (std::find(forbidden.begin(), forbidden.end(), line) !=
@@ -72,7 +77,10 @@ int main() {
                     break;
                 }
             }
-            if (!isValid) continue;
+            if (!isValid) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 4. rule: First four (4) letters must be unique
             for (auto &i : words) {
@@ -83,7 +91,10 @@ int main() {
                     break;
                 }
             }
-            if (!isValid) continue;
+            if (!isValid) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 5. rule: First 3 letters max 3 same
             three_same_cnt = 0;
@@ -97,11 +108,17 @@ int main() {
                     }
                 }
             }
-            if (!isValid) continue;
+            if (!isValid) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 6. rule: no words that start with rare char
             auto pos = line.find_first_of(rare_first);
-            if (pos == 0) continue;
+            if (pos == 0) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 7. rule: no multiple rare chars
             int same{0};
@@ -115,7 +132,10 @@ int main() {
                     break;
                 }
             }
-            if (!isValid) continue;
+            if (!isValid) {
+                rf << line << std::endl;
+                continue;
+            }
 
             // 8. rule: no too similar words
             for (auto &i : words) {
@@ -157,6 +177,7 @@ int main() {
         std::cout << "valid word count: " << cnt << std::endl;
         std::cout << "total word count: " << words.size() << std::endl;
         of.close();
+        rf.close();
         myfile.close();
         forbiddenfile.close();
     }
