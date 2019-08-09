@@ -65,7 +65,7 @@ int main() {
                     forbidden.end())
                 continue;
 
-            // 2. rule: word must contain only small alphabets
+            // 3. rule: word must contain only small alphabets
             for (auto &i : line) {
                 if (!std::isalpha(i) || !std::islower(i)) {
                     isValid = false;
@@ -74,7 +74,7 @@ int main() {
             }
             if (!isValid) continue;
 
-            // 3. rule: First four (4) letters must be unique
+            // 4. rule: First four (4) letters must be unique
             for (auto &i : words) {
                 std::string s1 = i.substr(0, 4);
                 std::string s2 = line.substr(0, 4);
@@ -85,7 +85,7 @@ int main() {
             }
             if (!isValid) continue;
 
-            // 4. rule: First 3 letters max 3 same
+            // 5. rule: First 3 letters max 3 same
             three_same_cnt = 0;
             for (auto &i : words) {
                 std::string s1 = i.substr(0, 3);
@@ -99,11 +99,11 @@ int main() {
             }
             if (!isValid) continue;
 
-            // 5. rule: no words that start with rare char
+            // 6. rule: no words that start with rare char
             auto pos = line.find_first_of(rare_first);
             if (pos == 0) continue;
 
-            // 6. rule: no multiple rare chars
+            // 7. rule: no multiple rare chars
             int same{0};
             for (auto &i : line) {
                 for (auto &j : rare) {
@@ -117,7 +117,7 @@ int main() {
             }
             if (!isValid) continue;
 
-            // 7. rule: no too similar words
+            // 8. rule: no too similar words
             for (auto &i : words) {
                 unsigned int diff = strDifference(line, i);
                 isValid = (diff >= 3 ? true : false);
