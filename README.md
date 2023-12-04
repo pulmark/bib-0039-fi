@@ -3,7 +3,7 @@ Command line tool to create a finnish language wordlist for Bitcoin BIP39. The t
 
 See [Bitcoin bip-0039.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) for details.
 
-By using the example output file (finnish.txt) and integrating it into your crypto wallet allows use of very rare language to provide a bit more security for you bitcoins.    
+By using the example output file (finnish.txt) and integrating it into your crypto wallet allows use of very rare language to provide a bit more security for your bitcoins.    
 
 # Usage
 
